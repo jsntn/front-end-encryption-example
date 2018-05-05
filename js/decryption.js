@@ -1,78 +1,10 @@
-let loader      = document.getElementById("loader"),
-    userKey     = document.getElementById("userKey"),
-    userPublicKey   = document.getElementById("userPublicKey"),
-    userPrivateKey  = document.getElementById("userPrivateKey"); 
-    unencrypted = document.getElementById("unencrypted"),
-    encrypted   = document.getElementById("encrypted"),
-    final       = document.getElementById("final"),
-    temp        = document.getElementById("temp");
+var userPublicKey = document.getElementById("userPublicKey");
+var userPrivateKey = document.getElementById("userPrivateKey"); 
+var unencrypted = document.getElementById("unencrypted");
+var encrypted = document.getElementById("encrypted");
+var final = document.getElementById("final");
 
-/** 
-	Options for generating keys, we need to provide the number
-	of bits for the keys, the larger the number the stronger 
-	the keys are, but they become harder to generate, we need
-	to provide a passphrase so we can later decrypt the keys.
-**/
-let keyOptions = {
-	userIds: [{name: "user", email: "example@example.com"}],
-	numBits: 2048,
-	passphrase: "password"
-	//you would get the passphrase from an input field normally
-}
-
-let user = {},
-    message = "",
-    email = {
-			subject: "Hey there!",
-			body: "This is a test text."
-		};
-
-/**
-	Here we generate keys using the options provided above,
-	we save the keys in local objects, but you would usually
-	store them in a database, or some other permanent storage.
-**/
-
-openpgp.generateKey(keyOptions)
-	.then(key => {
-		//user.privateKey = key.privateKeyArmored;
-		//user.publicKey = key.publicKeyArmored;
-		//userKey.innerHTML = "keys generated.";
-    user.publicKey = `-----BEGIN PGP PUBLIC KEY BLOCK----- 
-Version: OpenPGP.js v2.5.4 
-Comment: http://openpgpjs.org 
-
-xsBNBFrtKN8BCADypOzu1VPPmMnAfSx45HwiQ/G+DUnVKegs2EXJdsBHbADH 
-a1C7fDZFELUoI6wSC1PiLa0mOZcoZDHQCSmD5WIk+aIB/rXYW40crzZTuvxl 
-mjjbKQ4hfLsLgDNzStNIa/NSJa8wU9MB1zf3zevvW0z15/Medp5BA+1bPOyP 
-Xz9EzBMe2msuPfrI6PcesgSHzrAVJxjGf0mkMkG3duStlCZAAuWYumFwvkqN 
-r/1UklkW445uxMvDM/tDJU9osQMeXO8Ls8SuRKof/+13AtGIJqWYIwW9RmCQ 
-4pLV5Oip3bZ+1coIdJQu2mJpLHVbwV9BjBhSy1rnr5QN4TN/Bs4zcKKvABEB 
-AAHNGnVzZXIgPGV4YW1wbGVAZXhhbXBsZS5jb20+wsB1BBABCAApBQJa7Sjg 
-BgsJBwgDAgkQ3iyS9uPyee0EFQgKAgMWAgECGQECGwMCHgEAAFgAB/0VX4Kb 
-qjEP03Tcj5SKGntBrATlBlu5wTTlAA0reE4K9H3Mp9sh70g+193fPTT8Qjzr 
-fnHdQPQ2XT0VeWxO1J44yUHoP8xgev82hGuxmHiVjdx3xgNQDKnnmpGQ8l9K 
-maMUqoftnJoQl9yNOi4AaXeKK7Iy+Bwy7EHpD3ajomzIqor5PVroBccqbMvy 
-a5mfP3NsIm+eVLkAkIGB68tkt29xbdPbLyqZtXy0Gp1BeWNbsArrZoSH/tTN 
-tFSQcTkSuvXh+JNIP6dtRES4PivdYQHPLgQvr6oVPh/K0kF02MIvbNQq/QDO 
-UD/mwZ4nhm6jEK754SGtnWiSauUVqhCXB9IEzsBNBFrtKN8BCAC4niq6tvAN 
-qAOQz93Hpehh7iG/iEuFpwal3pcfK0/TOj5H0qpGhPKVPE9dW8l9kMcdMQMK 
-a/f2o62q/ZSuOZAIY2kEVTB/UxQ0SMofS8ygvJRp5Rhykpey+mR32lAyIN26 
-OsiWo53p1PjaunoWSgGp6Z6kX8lvE/MaYsI+TqryI3IxPrvdjptvPL80XNEQ 
-zd7hfGVfSwhsor9C73zOpZEI0pHvy3W/UKUSTLpBm9wCN5rN8LCK2bBcUncz 
-Jqu1oTFA/uSyk6f5HHUfy0REH+ie4ZzTfp6ZLdgC1QHQWda4SzsAVryuNHqB 
-H+83RXBFqNayq3nua4ygR7E2vVVhl399ABEBAAHCwF8EGAEIABMFAlrtKOAJ 
-EN4skvbj8nntAhsMAADdrAf8DKjvbPqRLsNkuMNKdd+O/mMwYEIGaeYYD+99 
-NX3JwxZp1pijEX8gK8HUf768+q/vhu6Chnx9n0JqBwmytb+B6Z2GViOjq0rT 
-HcftxVFmN/lsmnFM+spfePfgd+gVmjPnGb3Nn6ztadjBJEhJ6AO3YSLoigi+ 
-4f5O8qWFWv9QoreZkpVOtBP1fQnyKsxBDS2yIXb2fq48oU6D01wTdHXFcvvC 
-J25NPQTl+MaVYj2CNxfDPPAaOmOkbEg9tRo5Qs/dL4qd/Fvhh9PNXUplcAn8 
-rbhbdPBjh+LLh/y0VRxy53UaojP5OWanYVI6Z15G2y2ik6h1S5qDiWZVfQig 
-YQe5RQ== 
-=Mm7U 
------END PGP PUBLIC KEY BLOCK-----`;
-    //userPublicKey.innerHTML = user.publicKey;
-    user.privateKey = `-----BEGIN PGP PRIVATE KEY BLOCK----- 
+var privateKey = `-----BEGIN PGP PRIVATE KEY BLOCK----- 
 Version: OpenPGP.js v2.5.4 
 Comment: http://openpgpjs.org 
 
@@ -136,65 +68,37 @@ uFt08GOH4suH/LRVHHLndRqiM/k5ZqdhUjpnXkbbLaKTqHVLmoOJZlV9CKBh
 B7lF 
 =lxgs 
 -----END PGP PRIVATE KEY BLOCK-----`;
-    //userPrivateKey.innerHTML = user.privateKey;
-		return Promise.resolve();
-	})
-/*
-	.then(() => {
-		// Using user's public key, we encrypt the contents of the email.
-		const options = {
-			data: JSON.stringify(email),
-			publicKeys:  openpgp.key.readArmored(user.publicKey).keys
-		};
-		 unencrypted.innerHTML = "Plain text message : \r\n\r\n" + options.data;
 
-		return openpgp.encrypt(options)
-	})
-*/
-	.then((cipherText)=>{
-		// We get the cipherText which is the encrypted contents of the email.
-		// message = cipherText.data;
-    message = `-----BEGIN PGP MESSAGE-----
+var key = openpgp.key.readArmored(privateKey).keys[0];
+
+var encryptedMessage = `-----BEGIN PGP MESSAGE-----
 Version: OpenPGP.js v2.5.4
 Comment: http://openpgpjs.org
 
-wcBMAz3X8syyYKP1AQf/Xho3Psx3Aq7Nvv3kkKq8SdnA4vRNY7n9H4x3J6Xr
-G9ZShuk0ey/kvYdgBY4vrBKxbcXbevivBGOmmlVqUqLfEMeSF7IUc2lnUGGI
-qPKmEzYSK8BMXBnje2vJxj8kZheO6/XnjM6t47Cmj4o5ERZ7FaBfumau8MNt
-S+kj3z4z9tqkGrXi0zpeCW0z7trqtv5OOygvJTla1GCYHgr/xnWsO3BGzfNP
-POL5Q2PcKeNIKl0F3n4vXsOgc55xY7VSitaoGRvnhM2B2m4N1phbjmTsOAiR
-VNh1re1jF2i5Wh84Hs7xI4AnPuPx7xd50baUzp42aeYq14PHFcT6i23c7I9Y
-0NJuAZ8pDb97Ht9eOQA+Frfw7fDpY/Sswfzv8P0AFA5w9w3VpAZSClqzSyWb
-8wZueJWe5bBq8zhDGiEQGYOmI5UHMD85FgmUA1Vuaoviierew1HmZQBDRzQe
-1vHma5pFURruDO+2IXIm438mppHSK04=
-=lWiT
+wcBMAz3X8syyYKP1AQf9Hwlkvlsx8OwtpO6Q/m5BsdvowLYl29fT8YIefW7y
+u6g9sVoq0zP2W7Z+tqE1CYhpAH9o1Y1+bQDHY8wFvM5YYAAl/EcfsIuMtbJO
+f/eih7F2t6k0A2jhF2E5kV+7NK00XpQslx8KdFIx2ca4l5BQXCFVPpnqrVN2
+lMBSLo8ofe9zY6qhfRLuo20NgKyqW1XUxZyQ8KKmmFUaPBjRxwUNrIrh3KpA
+QnpPNOnD0ZSaw0D9ep8rJ6JalTyvvrMj5maulPZ2UaB41gdSCqvqRE6Bv/D6
+lK5ndCb8F+nBLz93bMEd6KtvE5YkjHzlZq3EqO1unA9e9FJd5hUez5AY0mSm
+vtJVAW7wybe1ogrRv+F4jwkFkqHTbxBLad+gjixkg2fpsKzpw9s2YZJhoGf/
+dGq+X7dUyj7aoczTtMcnd0SCP33JbnVwfoSGfUrPXxqoGwpaGSlLpVN8uA==
+=rcTF
 -----END PGP MESSAGE-----`;
-		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + message;
-    // temp.innerHTML = message;
-		return Promise.resolve();
-	})
-	.then(() => {
-		/**
-		   To decrypt the email, we now use user's private key, but before
-		   we can actually use it, we need to decrypt it using the passphrase
-		   we provided when we initialized the keys
-	    **/
-		let privateKey = openpgp.key.readArmored(user.privateKey).keys[0];
 
-		if (privateKey.decrypt("password")) {
-			return openpgp.decrypt({
-            			privateKey: privateKey,
-            			message: openpgp.message.readArmored(message)
-            		});
-		} 
-		return Promise.reject('Wrong passphrase');
-	})
-	.then((decryptedData) => {
-		// If all goes well we can now read the contents of user's message :)
-		final.innerHTML = "Decrypted message : \r\n\r\n" + decryptedData.data;
-		console.log(JSON.parse(decryptedData.data));
-	})
-	.catch((err)=>{
-		// In case something goes wrong
-		console.error(err);
-	})
+encrypted.innerHTML = "Encrypted message: \r\n\r\n" + encryptedMessage;
+
+var options = {
+    message: openpgp.message.readArmored(encryptedMessage),
+    privateKey: key
+};
+
+var pwd = prompt('Password, please',""); // password is `password`
+
+if (key.decrypt(pwd)) {
+  openpgp.decrypt(options).then(decryptedMessage => {
+    final.innerHTML = "Decrypted message: \r\n\r\n" + decryptedMessage.data;
+  });
+} else {
+  alert(pwd + ' is a wrong password.');
+}
