@@ -1,63 +1,49 @@
-let loader      = document.getElementById("loader"),
-    userKey     = document.getElementById("userKey"),
-    userPublicKey   = document.getElementById("userPublicKey"),
-    userPrivateKey  = document.getElementById("userPrivateKey"); 
-    unencrypted = document.getElementById("unencrypted"),
-    encrypted   = document.getElementById("encrypted");
+var userPublicKey = document.getElementById("userPublicKey");
+var userPrivateKey = document.getElementById("userPrivateKey"); 
+var unencrypted = document.getElementById("unencrypted");
+var encrypted = document.getElementById("encrypted");
 
-/** 
-	Options for generating keys, we need to provide the number
-	of bits for the keys, the larger the number the stronger 
-	the keys are, but they become harder to generate, we need
-	to provide a passphrase so we can later decrypt the keys.
-**/
-let keyOptions = {
-	userIds: [{name: "user", email: "example@example.com"}],
-	numBits: 2048,
-	passphrase: "password"
-	//you would get the passphrase from an input field normally
-}
+var publicKey = `-----BEGIN PGP PUBLIC KEY BLOCK----- 
+Version: OpenPGP.js v2.5.4 
+Comment: http://openpgpjs.org 
 
-let user = {},
-    message = "",
-    email = {
-			subject: "Hey there!",
-			body: "This is a test text."
-		};
+xsBNBFrtKN8BCADypOzu1VPPmMnAfSx45HwiQ/G+DUnVKegs2EXJdsBHbADH 
+a1C7fDZFELUoI6wSC1PiLa0mOZcoZDHQCSmD5WIk+aIB/rXYW40crzZTuvxl 
+mjjbKQ4hfLsLgDNzStNIa/NSJa8wU9MB1zf3zevvW0z15/Medp5BA+1bPOyP 
+Xz9EzBMe2msuPfrI6PcesgSHzrAVJxjGf0mkMkG3duStlCZAAuWYumFwvkqN 
+r/1UklkW445uxMvDM/tDJU9osQMeXO8Ls8SuRKof/+13AtGIJqWYIwW9RmCQ 
+4pLV5Oip3bZ+1coIdJQu2mJpLHVbwV9BjBhSy1rnr5QN4TN/Bs4zcKKvABEB 
+AAHNGnVzZXIgPGV4YW1wbGVAZXhhbXBsZS5jb20+wsB1BBABCAApBQJa7Sjg 
+BgsJBwgDAgkQ3iyS9uPyee0EFQgKAgMWAgECGQECGwMCHgEAAFgAB/0VX4Kb 
+qjEP03Tcj5SKGntBrATlBlu5wTTlAA0reE4K9H3Mp9sh70g+193fPTT8Qjzr 
+fnHdQPQ2XT0VeWxO1J44yUHoP8xgev82hGuxmHiVjdx3xgNQDKnnmpGQ8l9K 
+maMUqoftnJoQl9yNOi4AaXeKK7Iy+Bwy7EHpD3ajomzIqor5PVroBccqbMvy 
+a5mfP3NsIm+eVLkAkIGB68tkt29xbdPbLyqZtXy0Gp1BeWNbsArrZoSH/tTN 
+tFSQcTkSuvXh+JNIP6dtRES4PivdYQHPLgQvr6oVPh/K0kF02MIvbNQq/QDO 
+UD/mwZ4nhm6jEK754SGtnWiSauUVqhCXB9IEzsBNBFrtKN8BCAC4niq6tvAN 
+qAOQz93Hpehh7iG/iEuFpwal3pcfK0/TOj5H0qpGhPKVPE9dW8l9kMcdMQMK 
+a/f2o62q/ZSuOZAIY2kEVTB/UxQ0SMofS8ygvJRp5Rhykpey+mR32lAyIN26 
+OsiWo53p1PjaunoWSgGp6Z6kX8lvE/MaYsI+TqryI3IxPrvdjptvPL80XNEQ 
+zd7hfGVfSwhsor9C73zOpZEI0pHvy3W/UKUSTLpBm9wCN5rN8LCK2bBcUncz 
+Jqu1oTFA/uSyk6f5HHUfy0REH+ie4ZzTfp6ZLdgC1QHQWda4SzsAVryuNHqB 
+H+83RXBFqNayq3nua4ygR7E2vVVhl399ABEBAAHCwF8EGAEIABMFAlrtKOAJ 
+EN4skvbj8nntAhsMAADdrAf8DKjvbPqRLsNkuMNKdd+O/mMwYEIGaeYYD+99 
+NX3JwxZp1pijEX8gK8HUf768+q/vhu6Chnx9n0JqBwmytb+B6Z2GViOjq0rT 
+HcftxVFmN/lsmnFM+spfePfgd+gVmjPnGb3Nn6ztadjBJEhJ6AO3YSLoigi+ 
+4f5O8qWFWv9QoreZkpVOtBP1fQnyKsxBDS2yIXb2fq48oU6D01wTdHXFcvvC 
+J25NPQTl+MaVYj2CNxfDPPAaOmOkbEg9tRo5Qs/dL4qd/Fvhh9PNXUplcAn8 
+rbhbdPBjh+LLh/y0VRxy53UaojP5OWanYVI6Z15G2y2ik6h1S5qDiWZVfQig 
+YQe5RQ== 
+=Mm7U 
+-----END PGP PUBLIC KEY BLOCK-----`;
 
-/**
-	Here we generate keys using the options provided above,
-	we save the keys in local objects, but you would usually
-	store them in a database, or some other permanent storage.
-**/
+var options = {
+    data: 'This is a very secret message',
+    publicKeys: openpgp.key.readArmored(publicKey).keys
+};
 
-openpgp.generateKey(keyOptions)
-	.then(key => {
-		user.privateKey = key.privateKeyArmored;
-		user.publicKey = key.publicKeyArmored;
-		userKey.innerHTML = "keys generated.";
-    userPublicKey.innerHTML = user.publicKey;
-    // user.publicKey = "-----BEGIN PGP PUBLIC KEY BLOCK----- Version: OpenPGP.js v2.5.4 Comment: http://openpgpjs.org xsBNBFrtB8ABCAD4Elx/Zq1Xx9EAyIPIwWijnm3mO5lyeK46FEtX7v3b8YAb CVhJa74MxP1zv3kTriIo953xf4h0W0UYH9Wwlem2et/W4xejlfnMZCstONFo 9Zn/mfzjKavbd1tQj1/EPv6aAKNV44WNQQRYx6UBKtWwW7g4b186NluZC3/S 4geqwyBRKDMeOY+JrhkM8gzbw6/Igq71YtYo3lXvKX9IT4BGunX3B9xTri+F m9D91rdjIA/9rHySrzqnLFNhekOQ/+p/SM2bZVgSjkHmtBpMJquFhORcLzM3 J9bEZzQ9Lx0kCt4Q+flZILe57Yt45mhqHlf4uWpIY3lFuGQurKx1V4a1ABEB AAHNGnVzZXIgPGV4YW1wbGVAZXhhbXBsZS5jb20+wsB1BBABCAApBQJa7QfB BgsJBwgDAgkQtmGN00RT+p4EFQgKAgMWAgECGQECGwMCHgEAAJrHCACzo8nU s9OUQrMiLMp5bLKnFWHSBUQl5aB41ln1RvMcp28Sz1pJ97mm/jjgTivlU5ly XJdaqRt7USz+7VXrEfucRUqTDsKxTlrPerjOqzQnsC5MxwV7KdcasbDn5ANQ tsamYpTfJHEBcMPGr/INYv5ryuMzRlNQiYb2dnNtIbcZ/pa/KxKKmUADS5Hg RiwbCV51+vkeAyuvP8IdZXC88kT8wngEzPIyP1W9FDJfz8X8X/26MvbL1CcM wNAZsWJEQtIEv/oC+9+51vWkJtcttuh0G20cYTRcBzD1VCd009R7i0nOV41V zBwuGBLlzvFSTU+sBv1saxsL/vw2M9yQ1fZ0zsBNBFrtB8ABCADyUtmnsJeq MDyXp0zkVE2e4ZNGIJUTP55JSrX9T+hRQSNmDCN+Ta6EeQp1pggS5JQlU3mB snvJZyMv36kZjRsMXAWIG0p7kA+DMRbQe6/7UMj+RP/4JLmGq2/1Kh/lqohh Iu+kXVcSXC7PI0kUbZRu70sHyGOYpFyIkatLaSuhsz5NZYQO3VhNbtgcI7U1 zxBA6lMHwkJn6+Ta/E7hVEWUTyaDpvtNiXGkEGg0LE1cjQV8KLky49HIfR+N WmsJsb1E0gGhtfTyn5wVwTJeU1a91L2n+4JHLQWowPwlq8HcA4wtNav+XZqC Zxa1SsNhvugise01q+uwtM/xKXn3AC+ZABEBAAHCwF8EGAEIABMFAlrtB8EJ ELZhjdNEU/qeAhsMAABtLAf/bcwzIxak3PWpaaWBD1roEb3nwU48tEP9Llkj t4JRDkDUaKj3WmLVEWAUeO2ugifQ7FbiqSeDwCdTApNPUZDahvDwWTFz5MfH RSz/CXIReV9ALofGgNpwg04m/jocn83sXnHRiCFb7/2mh91sBFv1RWSVbre8 CAAPi8nG4UcYy5aQ2AK95I+xGaIoE/fVtTi27m5GFZ1QbaQqT4e2WavvmJmP zOP100BLDCOA4g9ZBZy74D8VR2G2blH/teVfXtAuLFX1WrGMS0wqFmfnP7AP Gqy9Ny4lQ7SVmEr90kO/GqJkkzFjKaF+zGRXDsWoJuRDaNBuvKI+LDW4+BFh Zz+2uQ== =LXcI -----END PGP PUBLIC KEY BLOCK-----";
-    userPrivateKey.innerHTML = user.privateKey;
-		return Promise.resolve();
-	})
-	.then(() => {
-		// Using user's public key, we encrypt the contents of the email.
-		const options = {
-			data: JSON.stringify(email),
-			publicKeys:  openpgp.key.readArmored(user.publicKey).keys
-		};
-		unencrypted.innerHTML = "Plain text message : \r\n\r\n" + options.data;
+unencrypted.innerHTML = "Plain text message : \r\n\r\n" + options.data;
 
-		return openpgp.encrypt(options)
-	})
-	.then((cipherText)=>{
-		// We get the cipherText which is the encrypted contents of the email.
-		message = cipherText.data;
-		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + message;
-		return Promise.resolve();		
-	})
-	.catch((err)=>{
-		// In case something goes wrong
-		console.error(err);
-	})
+openpgp.encrypt(options).then(encryptedData => {
+		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + encryptedData.data;
+});
