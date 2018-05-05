@@ -33,24 +33,6 @@ let user = {},
 	store them in a database, or some other permanent storage.
 **/
 
-function readTextFile(file)
-{
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                alert(allText);
-            }
-        }
-    }
-    rawFile.send(null);
-}
-
 openpgp.generateKey(keyOptions)
 	.then(key => {
 		//user.privateKey = key.privateKeyArmored;
@@ -157,20 +139,21 @@ B7lF
     //userPrivateKey.innerHTML = user.privateKey;
 		return Promise.resolve();
 	})
+/*
 	.then(() => {
 		// Using user's public key, we encrypt the contents of the email.
 		const options = {
 			data: JSON.stringify(email),
 			publicKeys:  openpgp.key.readArmored(user.publicKey).keys
 		};
-		// unencrypted.innerHTML = "Plain text message : \r\n\r\n" + options.data;
+		 unencrypted.innerHTML = "Plain text message : \r\n\r\n" + options.data;
 
 		return openpgp.encrypt(options)
 	})
+*/
 	.then((cipherText)=>{
 		// We get the cipherText which is the encrypted contents of the email.
-		//message = cipherText.data;
-/*
+		// message = cipherText.data;
     message = `-----BEGIN PGP MESSAGE-----
 Version: OpenPGP.js v2.5.4
 Comment: http://openpgpjs.org
@@ -186,11 +169,9 @@ VNh1re1jF2i5Wh84Hs7xI4AnPuPx7xd50baUzp42aeYq14PHFcT6i23c7I9Y
 1vHma5pFURruDO+2IXIm438mppHSK04=
 =lWiT
 -----END PGP MESSAGE-----`;
-*/
-    message = readTextFile("../lib/encryptedText.txt");
 		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + message;
-    //temp.innerHTML = message;
-		return Promise.resolve();		
+    // temp.innerHTML = message;
+		return Promise.resolve();
 	})
 	.then(() => {
 		/**
