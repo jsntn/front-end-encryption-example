@@ -33,11 +33,29 @@ let user = {},
 	store them in a database, or some other permanent storage.
 **/
 
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
 openpgp.generateKey(keyOptions)
 	.then(key => {
-		user.privateKey = key.privateKeyArmored;
-		user.publicKey = key.publicKeyArmored;
-		userKey.innerHTML = "keys generated.";
+		//user.privateKey = key.privateKeyArmored;
+		//user.publicKey = key.publicKeyArmored;
+		//userKey.innerHTML = "keys generated.";
     user.publicKey = `-----BEGIN PGP PUBLIC KEY BLOCK----- 
 Version: OpenPGP.js v2.5.4 
 Comment: http://openpgpjs.org 
@@ -71,7 +89,7 @@ rbhbdPBjh+LLh/y0VRxy53UaojP5OWanYVI6Z15G2y2ik6h1S5qDiWZVfQig
 YQe5RQ== 
 =Mm7U 
 -----END PGP PUBLIC KEY BLOCK-----`;
-    userPublicKey.innerHTML = user.publicKey;
+    //userPublicKey.innerHTML = user.publicKey;
     user.privateKey = `-----BEGIN PGP PRIVATE KEY BLOCK----- 
 Version: OpenPGP.js v2.5.4 
 Comment: http://openpgpjs.org 
@@ -136,7 +154,7 @@ uFt08GOH4suH/LRVHHLndRqiM/k5ZqdhUjpnXkbbLaKTqHVLmoOJZlV9CKBh
 B7lF 
 =lxgs 
 -----END PGP PRIVATE KEY BLOCK-----`;
-    userPrivateKey.innerHTML = user.privateKey;
+    //userPrivateKey.innerHTML = user.privateKey;
 		return Promise.resolve();
 	})
 	.then(() => {
@@ -151,8 +169,8 @@ B7lF
 	})
 	.then((cipherText)=>{
 		// We get the cipherText which is the encrypted contents of the email.
-		message = cipherText.data;
-		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + message;
+		//message = cipherText.data;
+/*
     message = `-----BEGIN PGP MESSAGE-----
 Version: OpenPGP.js v2.5.4
 Comment: http://openpgpjs.org
@@ -168,6 +186,9 @@ VNh1re1jF2i5Wh84Hs7xI4AnPuPx7xd50baUzp42aeYq14PHFcT6i23c7I9Y
 1vHma5pFURruDO+2IXIm438mppHSK04=
 =lWiT
 -----END PGP MESSAGE-----`;
+*/
+    message = readTextFile("../lib/encryptedText.txt");
+		encrypted.innerHTML = "Encrypted message : \r\n\r\n" + message;
     //temp.innerHTML = message;
 		return Promise.resolve();		
 	})
@@ -188,7 +209,7 @@ VNh1re1jF2i5Wh84Hs7xI4AnPuPx7xd50baUzp42aeYq14PHFcT6i23c7I9Y
 		return Promise.reject('Wrong passphrase');
 	})
 	.then((decryptedData) => {
-		// If all goes well we can now read the contents of Jonh's message :)
+		// If all goes well we can now read the contents of user's message :)
 		final.innerHTML = "Decrypted message : \r\n\r\n" + decryptedData.data;
 		console.log(JSON.parse(decryptedData.data));
 	})
