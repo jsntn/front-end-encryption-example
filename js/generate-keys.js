@@ -4,7 +4,7 @@ var userPrivateKey = document.getElementById("userPrivateKey");
 var options = {
     userIds: [{ name: 'user', email: 'user@example.com' }],
     numBits: 2048,
-    passphrase: '123456'
+    passphrase: 'password'
 };
 
 var pubKey, privKey;
